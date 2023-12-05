@@ -16,5 +16,6 @@ EXPOSE 80
 
 # Command to run the application
 #CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80", "--reload"]
-# Command to keep the container running
-CMD ["tail", "-f", "/dev/null"]
+# Command to keep the container running, latest stage of the project
+CMD ["tail", "-f", "/dev/null"] 
+
