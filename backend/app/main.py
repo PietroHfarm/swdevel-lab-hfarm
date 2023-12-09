@@ -37,15 +37,7 @@ def read_root():
 def get_poste():
     dati_poste=leggi_dati_da_csv("./poste.csv")
 
-<<<<<<< Updated upstream
-
-@app.get('/query/{person_name}')
-def read_item(person_name: str):
-    """
-    Endpoint to query birthdays based on person_name.
-=======
     return{"poste":dati_poste}
->>>>>>> Stashed changes
 
 @app.get('/farmacie')
 def get_farmacie():
