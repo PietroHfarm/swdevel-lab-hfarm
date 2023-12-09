@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
 import csv
-from mymodules.useful_csv import leggi_dati_da_csv
+from mymodules.useful_csv import leggi_dati_da_csv,calcola_distanza
 
 app = FastAPI()
 
@@ -37,17 +37,35 @@ def read_root():
 def get_poste():
     dati_poste=leggi_dati_da_csv("./poste.csv")
 
-    return{"poste":dati_poste}
+    poste_nel_raggio = []
+    for poste in dati_poste:
+        distanza = calcola_distanza(lat, lon, float(poste['LAT_Y_4326']), float(poste['LONG_X_4326']))
+        if distanza <= raggio:
+            poste_nel_raggio.append(poste)
+
+    return{"poste":poste_nel_raggio}
 
 @app.get('/farmacie')
 def get_farmacie():
     dati_farmacie=leggi_dati_da_csv('./farmacie.csv')
 
-    return{"farmacie": dati_farmacie}
+    poste_nel_raggio = []
+    for farmacie in dati_farmacie:
+        distanza = calcola_distanza(lat, lon, float(farmacie['LATITUDINE']), float(farmacie['LONGITUDINE']))
+        if distanza <= raggio:
+            poste_nel_raggio.append(farmacie)
+
+    return{"farmacie": poste_nel_raggio}
 
 @app.get('/esercizi')
 def get_esercizi():
     dati_esercizi=leggi_dati_da_csv('./esercizi1.csv')
 
-    return{"esercizi": dati_esercizi}
+    poste_nel_raggio = []
+    for esercizi in dati_esercizi:
+        distanza = calcola_distanza(lat, lon, float(esercizi['LAT_WGS84']), float(esercizi['LONG_WGS84']))
+        if distanza <= raggio:
+            poste_nel_raggio.append(esercizi)
+
+    return{"esercizi": poste_nel_raggio}
 
