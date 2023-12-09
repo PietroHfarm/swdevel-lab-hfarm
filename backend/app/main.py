@@ -34,7 +34,10 @@ def read_root():
     return {"Hello": "World!!"}
 
 @app.get('/poste')
-def get_poste():
+def get_poste (lat: float = Query(10000, title='Latitude', description='Default latitude'),
+              lon: float = Query(10000, title='Longitude', description='Default longitude'),
+              raggio: float = Query(10000, title='Radius', description='Radius in meters')
+):
     dati_poste=leggi_dati_da_csv("./poste.csv")
 
     poste_nel_raggio = []
@@ -46,7 +49,10 @@ def get_poste():
     return{"poste":poste_nel_raggio}
 
 @app.get('/farmacie')
-def get_farmacie():
+def get_farmacie(lat: float = Query(10000, title='Latitude', description='Default latitude'),
+              lon: float = Query(10000, title='Longitude', description='Default longitude'),
+              raggio: float = Query(10000, title='Radius', description='Radius in meters')
+):
     dati_farmacie=leggi_dati_da_csv('./farmacie.csv')
 
     poste_nel_raggio = []
@@ -58,7 +64,10 @@ def get_farmacie():
     return{"farmacie": poste_nel_raggio}
 
 @app.get('/esercizi')
-def get_esercizi():
+def get_esercizi (lat: float = Query(10000, title='Latitude', description='Default latitude'),
+              lon: float = Query(10000, title='Longitude', description='Default longitude'),
+              raggio: float = Query(10000, title='Radius', description='Radius in meters')
+):
     dati_esercizi=leggi_dati_da_csv('./esercizi1.csv')
 
     poste_nel_raggio = []
