@@ -10,27 +10,18 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
-
-
-from .mymodules.birthdays import return_birthday, print_birthdays_str
+import csv
+from mymodules.useful_csv import leggi_dati_da_csv,calcola_distanza
 
 app = FastAPI()
 
-# Dictionary of birthdays
-birthdays_dictionary = {
-    'Albert Einstein': '03/14/1879',
-    'Benjamin Franklin': '01/17/1706',
-    'Ada Lovelace': '12/10/1815',
-    'Donald Trump': '06/14/1946',
-    'Rowan Atkinson': '01/6/1955'
-}
-
-df = pd.read_csv('/app/app/employees.csv')
-
-@app.get('/csv_show')
-def read_and_return_csv():
-    aux = df['Age'].values
-    return{"Age": str(aux.argmin())}
+def leggi_dati_da_csv(file_path):
+    dati = []
+    with open(file_path, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=';')
+        for row in reader:
+            dati.append(row)
+    return dati
 
 @app.get('/')
 def read_root():
@@ -42,43 +33,48 @@ def read_root():
     """
     return {"Hello": "World!!"}
 
+@app.get('/poste')
+def get_poste (lat: float = Query(10000, title='Latitude', description='Default latitude'),
+              lon: float = Query(10000, title='Longitude', description='Default longitude'),
+              raggio: float = Query(10000, title='Radius', description='Radius in meters')
+):
+    dati_poste=leggi_dati_da_csv("./poste.csv")
 
-@app.get('/query/{person_name}')
-def read_item(person_name: str):
-    """
-    Endpoint to query birthdays based on person_name.
+    poste_nel_raggio = []
+    for poste in dati_poste:
+        distanza = calcola_distanza(lat, lon, float(poste['LAT_Y_4326']), float(poste['LONG_X_4326']))
+        if distanza <= raggio:
+            poste_nel_raggio.append(poste)
 
-    Args:
-        person_name (str): The name of the person.
+    return{"poste":poste_nel_raggio}
 
-    Returns:
-        dict: Birthday information for the provided person_name.
-    """
-    person_name = person_name.title()  # Convert to title case for consistency
-    birthday = birthdays_dictionary.get(person_name)
-    if birthday:
-        return {"person_name": person_name, "birthday": birthday}
-    else:
-        return {"error": "Person not found"}
+@app.get('/farmacie')
+def get_farmacie(lat: float = Query(10000, title='Latitude', description='Default latitude'),
+              lon: float = Query(10000, title='Longitude', description='Default longitude'),
+              raggio: float = Query(10000, title='Radius', description='Radius in meters')
+):
+    dati_farmacie=leggi_dati_da_csv('./farmacie.csv')
 
+    poste_nel_raggio = []
+    for farmacie in dati_farmacie:
+        distanza = calcola_distanza(lat, lon, float(farmacie['LATITUDINE']), float(farmacie['LONGITUDINE']))
+        if distanza <= raggio:
+            poste_nel_raggio.append(farmacie)
 
-@app.get('/module/search/{person_name}')
-def read_item_from_module(person_name: str):
-    return {return_birthday(person_name)}
+    return{"farmacie": poste_nel_raggio}
 
+@app.get('/esercizi')
+def get_esercizi (lat: float = Query(10000, title='Latitude', description='Default latitude'),
+              lon: float = Query(10000, title='Longitude', description='Default longitude'),
+              raggio: float = Query(10000, title='Radius', description='Radius in meters')
+):
+    dati_esercizi=leggi_dati_da_csv('./esercizi1.csv')
 
-@app.get('/module/all')
-def dump_all_birthdays():
-    return {print_birthdays_str()}
+    poste_nel_raggio = []
+    for esercizi in dati_esercizi:
+        distanza = calcola_distanza(lat, lon, float(esercizi['LAT_WGS84']), float(esercizi['LONG_WGS84']))
+        if distanza <= raggio:
+            poste_nel_raggio.append(esercizi)
 
+    return{"esercizi": poste_nel_raggio}
 
-@app.get('/get-date')
-def get_date():
-    """
-    Endpoint to get the current date.
-
-    Returns:
-        dict: Current date in ISO format.
-    """
-    current_date = datetime.now().isoformat()
-    return JSONResponse(content={"date": current_date})
