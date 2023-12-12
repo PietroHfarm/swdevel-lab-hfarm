@@ -10,7 +10,8 @@ from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
 import csv
-from mymodules.useful_csv import leggi_dati_da_csv,calcola_distanza
+from mymodules.csv_reading_function import leggi_dati_da_csv
+from mymodules.distance_function import calcola_distanza
 
 app = FastAPI()
 
