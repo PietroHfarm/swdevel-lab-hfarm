@@ -39,6 +39,17 @@ def get_poste_from_backend(lon, lat, radius):
     response.raise_for_status()
     return response.json()
 
+def get_farmacie_from_backend(lon, lat, radius):
+    backend_url = f'http://backend/farmacie?lon={lat}&lat={lon}&raggio={radius}'
+    response = requests.get(backend_url)
+    response.raise_for_status()
+    return response.json()
+
+def get_esercizi_from_backend(lon, lat, radius):
+    backend_url = f'http://backend/esercizi?lon={lat}&lat={lon}&raggio={radius}'
+    response = requests.get(backend_url)
+    response.raise_for_status()
+    return response.json()
 
 @app.route('/internal', methods=['GET', 'POST'])
 def internal():
