@@ -5,8 +5,7 @@ This module defines a FastAPI application that serves
 as the backend for the project.
 """
 
-from fastapi import FastAPI
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
@@ -15,13 +14,6 @@ from mymodules.useful_csv import leggi_dati_da_csv,calcola_distanza
 
 app = FastAPI()
 
-def leggi_dati_da_csv(file_path):
-    dati = []
-    with open(file_path, newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=';')
-        for row in reader:
-            dati.append(row)
-    return dati
 
 @app.get('/')
 def read_root():
@@ -34,47 +26,47 @@ def read_root():
     return {"Hello": "World!!"}
 
 @app.get('/poste')
-def get_poste (lat: float = Query(10000, title='Latitude', description='Default latitude'),
-              lon: float = Query(10000, title='Longitude', description='Default longitude'),
-              raggio: float = Query(10000, title='Radius', description='Radius in meters')
+def get_poste (lat: float = Query(0, title='Latitude', description='Default latitude'),
+              lon: float = Query(0, title='Longitude', description='Default longitude'),
+              radius: float = Query(100, title='Radius', description='Radius in meters')
 ):
-    dati_poste=leggi_dati_da_csv("./poste.csv")
+    poste_data=leggi_dati_da_csv("./poste.csv")
 
-    poste_nel_raggio = []
-    for poste in dati_poste:
-        distanza = calcola_distanza(lat, lon, float(poste['LAT_Y_4326']), float(poste['LONG_X_4326']))
-        if distanza <= raggio:
-            poste_nel_raggio.append(poste)
+    poste_in_radius = []
+    for poste in poste_data:
+        distance = calcola_distanza(lat, lon, float(poste['LAT_Y_4326']), float(poste['LONG_X_4326']))
+        if distance <= radius:
+            poste_in_radius.append(poste)
 
-    return{"poste":poste_nel_raggio}
+    return{"poste":poste_in_radius}
 
 @app.get('/farmacie')
-def get_farmacie(lat: float = Query(10000, title='Latitude', description='Default latitude'),
-              lon: float = Query(10000, title='Longitude', description='Default longitude'),
-              raggio: float = Query(10000, title='Radius', description='Radius in meters')
+def get_farmacie(lat: float = Query(0, title='Latitude', description='Default latitude'),
+              lon: float = Query(0, title='Longitude', description='Default longitude'),
+              radius: float = Query(100, title='Radius', description='Radius in meters')
 ):
-    dati_farmacie=leggi_dati_da_csv('./farmacie.csv')
+    farmacie_data=leggi_dati_da_csv('./farmacie.csv')
 
-    poste_nel_raggio = []
-    for farmacie in dati_farmacie:
-        distanza = calcola_distanza(lat, lon, float(farmacie['LATITUDINE']), float(farmacie['LONGITUDINE']))
-        if distanza <= raggio:
-            poste_nel_raggio.append(farmacie)
+    farmacie_in_radius = []
+    for farmacie in farmacie_data:
+        distance = calcola_distanza(lat, lon, float(farmacie['LATITUDINE']), float(farmacie['LONGITUDINE']))
+        if distance <= radius:
+            farmacie_in_radius.append(farmacie)
 
-    return{"farmacie": poste_nel_raggio}
+    return{"farmacie": farmacie_in_radius}
 
 @app.get('/esercizi')
-def get_esercizi (lat: float = Query(10000, title='Latitude', description='Default latitude'),
-              lon: float = Query(10000, title='Longitude', description='Default longitude'),
-              raggio: float = Query(10000, title='Radius', description='Radius in meters')
+def get_esercizi (lat: float = Query(0, title='Latitude', description='Default latitude'),
+              lon: float = Query(0, title='Longitude', description='Default longitude'),
+              radius: float = Query(100, title='Radius', description='Radius in meters')
 ):
-    dati_esercizi=leggi_dati_da_csv('./esercizi1.csv')
+    esercizi_data=leggi_dati_da_csv('./esercizi1.csv')
 
-    poste_nel_raggio = []
-    for esercizi in dati_esercizi:
-        distanza = calcola_distanza(lat, lon, float(esercizi['LAT_WGS84']), float(esercizi['LONG_WGS84']))
-        if distanza <= raggio:
-            poste_nel_raggio.append(esercizi)
+    esercizi_in_radius= []
+    for esercizi in esercizi_data:
+        distance = calcola_distanza(lat, lon, float(esercizi['LAT_WGS84']), float(esercizi['LONG_WGS84']))
+        if distance <= radius:
+            esercizi_in_radius.append(esercizi)
 
-    return{"esercizi": poste_nel_raggio}
+    return{"esercizi": esercizi_in_radius}
 
