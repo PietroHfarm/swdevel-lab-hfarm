@@ -8,6 +8,8 @@ from flask import Flask, render_template
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
+from dotenv import load_dotenv 
+import os 
 
 load_dotenv()
 
@@ -21,11 +23,6 @@ FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your F
 BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 
-class QueryForm(FlaskForm):
-    person_name = StringField('Person Name:')
-    submit = SubmitField('Get Birthday from FastAPI Backend')
-
-
 @app.route('/')
 def index():
     """
@@ -34,9 +31,13 @@ def index():
     Returns:
         str: Rendered HTML content for the index page.
     """
-    # Fetch the date from the backend
-    date_from_backend = fetch_date_from_backend()
-    return render_template('index.html', date_from_backend=date_from_backend)
+    return render_template('homepage.html')
+
+def get_poste_from_backend(lon, lat, radius):
+    backend_url = f'http://backend/poste?lon={lat}&lat={lon}&raggio={radius}'  # Aggiustato il formato dell'URL
+    response = requests.get(backend_url)
+    response.raise_for_status()
+    return response.json()
 
 
 @app.route('/internal', methods=['GET', 'POST'])
