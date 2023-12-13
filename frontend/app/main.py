@@ -38,10 +38,10 @@ def index():
     Returns:
         str: Rendered HTML content for the index page.
     """
-    return render_template('service_page.html')
+    return render_template('homepage.html')
 
 def get_poste_from_backend(lon, lat, radius):
-    backend_url = f'http://backend/poste?lon={lat}&lat={lon}&radius={radius}'  # Aggiustato il formato dell'URL
+    backend_url = f'http://backend/poste?lat={lat}&lon={lon}&radius={radius}'  # Aggiustato il formato dell'URL
     try:
         response = requests.get(backend_url)
         response.raise_for_status()
@@ -51,7 +51,7 @@ def get_poste_from_backend(lon, lat, radius):
         return {'error': 'Error'}
 
 def get_farmacie_from_backend(lon, lat, radius):
-    backend_url = f'http://backend/farmacie?lon={lat}&lat={lon}&radius={radius}'
+    backend_url = f'http://backend/farmacie?lat={lat}&lon={lon}&radius={radius}'
     try:
         response = requests.get(backend_url)
         response.raise_for_status()
@@ -61,7 +61,7 @@ def get_farmacie_from_backend(lon, lat, radius):
         return {'error': 'Error'}
 
 def get_esercizi_from_backend(lon, lat, radius):
-    backend_url = f'http://backend/esercizi?lon={lat}&lat={lon}&radius={radius}'
+    backend_url = f'http://backend/esercizi?lat={lat}&lon={lon}&radius={radius}'
     try:
         response = requests.get(backend_url)
         response.raise_for_status()
@@ -70,8 +70,8 @@ def get_esercizi_from_backend(lon, lat, radius):
         print(f"Error fetching esercizi data from backend:{e}")
         return {'error': 'Error'}
 
-@app.route('/internal')
-def internal():
+@app.route('/servicepage')
+def servicepage():
     """
     Render the internal page.
 
@@ -82,7 +82,7 @@ def internal():
     poste_data=get_poste_from_backend(45.464098,9.191926,1000)
     esercizi_data=get_esercizi_from_backend(45.464098,9.191926,1000)
     error_message = None  # Initialize error message
-    return render_template('service_page.html', poste_data=poste_data, esercizi_data=esercizi_data)
+    return render_template('servicepage.html', form=form, poste_data=poste_data, esercizi_data=esercizi_data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
