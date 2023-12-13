@@ -8,6 +8,10 @@ from flask import Flask, render_template
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
+from dotenv import load_dotenv 
+import os 
+from wtforms import FloatField, SubmitField, SelectField
+from wtforms.validators import DataRequired
 
 load_dotenv()
 
@@ -20,11 +24,11 @@ app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
 FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your FastAPI backend
 BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
-
 class QueryForm(FlaskForm):
-    person_name = StringField('Person Name:')
-    submit = SubmitField('Get Birthday from FastAPI Backend')
-
+    address = StringField('Address', validators=[DataRequired()])
+    raggio = FloatField('Raggio', validators=[DataRequired()])
+    categoria = SelectField('Categoria', choices=[('poste', 'Poste'), ('farmacie', 'Farmacie'), ('esercizi', 'Esercizi')], default='poste')
+    submit = SubmitField('Submit')
 
 @app.route('/')
 def index():
@@ -34,13 +38,40 @@ def index():
     Returns:
         str: Rendered HTML content for the index page.
     """
-    # Fetch the date from the backend
-    date_from_backend = fetch_date_from_backend()
-    return render_template('index.html', date_from_backend=date_from_backend)
+    return render_template('homepage.html')
 
+def get_poste_from_backend(lon, lat, radius):
+    backend_url = f'http://backend/poste?lat={lat}&lon={lon}&radius={radius}'  # Aggiustato il formato dell'URL
+    try:
+        response = requests.get(backend_url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching poste data from backend:{e}")
+        return {'error': 'Error'}
 
-@app.route('/internal', methods=['GET', 'POST'])
-def internal():
+def get_farmacie_from_backend(lon, lat, radius):
+    backend_url = f'http://backend/farmacie?lat={lat}&lon={lon}&radius={radius}'
+    try:
+        response = requests.get(backend_url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching farmacie data from backend:{e}")
+        return {'error': 'Error'}
+
+def get_esercizi_from_backend(lon, lat, radius):
+    backend_url = f'http://backend/esercizi?lat={lat}&lon={lon}&radius={radius}'
+    try:
+        response = requests.get(backend_url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching esercizi data from backend:{e}")
+        return {'error': 'Error'}
+
+@app.route('/servicepage')
+def servicepage():
     """
     Render the internal page.
 
@@ -48,8 +79,10 @@ def internal():
         str: Rendered HTML content for the index page.
     """
     form = QueryForm()
+    poste_data=get_poste_from_backend(45.464098,9.191926,1000)
+    esercizi_data=get_esercizi_from_backend(45.464098,9.191926,1000)
     error_message = None  # Initialize error message
-
+    return render_template('servicepage.html', form=form, poste_data=poste_data, esercizi_data=esercizi_data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
