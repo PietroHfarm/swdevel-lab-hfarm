@@ -69,6 +69,20 @@ def get_esercizi_from_backend(lon, lat, radius):
     except requests.exceptions.RequestException as e:
         print(f"Error fetching esercizi data from backend:{e}")
         return {'error': 'Error'}
+    
+def get_lat_lon_from_address(address):
+    
+    geocode_url = f'https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={google_maps_api_key}'
+  
+    response = requests.get(geocode_url)
+    data = response.json()
+
+    if data['status'] == 'OK' and len(data['results']) > 0:
+        location = data['results'][0]['geometry']['location']
+
+    else:
+        print(f"Errore nella richiesta di geocodifica: {data['status']}")
+        return None, None
 
 @app.route('/servicepage')
 def servicepage():
@@ -86,3 +100,4 @@ def servicepage():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
+
