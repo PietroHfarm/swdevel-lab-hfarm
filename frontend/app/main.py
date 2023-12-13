@@ -79,6 +79,14 @@ def get_lat_lon_from_address(address):
 
     if data['status'] == 'OK' and len(data['results']) > 0:
         location = data['results'][0]['geometry']['location']
+        
+        if "MI" in address.upper():
+            lat = location['lat']
+            lon = location['lng']
+            return lat, lon
+        else:
+            print("L'indirizzo non contiene la sigla di provincia 'MI' (Milano).")
+            return None, None
 
     else:
         print(f"Errore nella richiesta di geocodifica: {data['status']}")
