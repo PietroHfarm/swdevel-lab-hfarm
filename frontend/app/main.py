@@ -42,21 +42,33 @@ def index():
 
 def get_poste_from_backend(lon, lat, radius):
     backend_url = f'http://backend/poste?lon={lat}&lat={lon}&radius={radius}'  # Aggiustato il formato dell'URL
-    response = requests.get(backend_url)
-    response.raise_for_status()
-    return response.json()
+    try:
+        response = requests.get(backend_url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching poste data from backend:{e}")
+        return {'error': 'Error'}
 
 def get_farmacie_from_backend(lon, lat, radius):
     backend_url = f'http://backend/farmacie?lon={lat}&lat={lon}&radius={radius}'
-    response = requests.get(backend_url)
-    response.raise_for_status()
-    return response.json()
+    try:
+        response = requests.get(backend_url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching farmacie data from backend:{e}")
+        return {'error': 'Error'}
 
 def get_esercizi_from_backend(lon, lat, radius):
     backend_url = f'http://backend/esercizi?lon={lat}&lat={lon}&radius={radius}'
-    response = requests.get(backend_url)
-    response.raise_for_status()
-    return response.json()
+    try:
+        response = requests.get(backend_url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching esercizi data from backend:{e}")
+        return {'error': 'Error'}
 
 @app.route('/internal')
 def internal():
