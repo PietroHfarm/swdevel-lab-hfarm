@@ -10,6 +10,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from dotenv import load_dotenv 
 import os 
+from wtforms import FloatField, SubmitField, SelectField
+from wtforms.validators import DataRequired
 
 load_dotenv()
 
@@ -22,6 +24,11 @@ app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
 FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your FastAPI backend
 BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
+class QueryForm(FlaskForm):
+    address = StringField('Address', validators=[DataRequired()])
+    raggio = FloatField('Raggio', validators=[DataRequired()])
+    categoria = SelectField('Categoria', choices=[('poste', 'Poste'), ('farmacie', 'Farmacie'), ('esercizi', 'Esercizi')], default='poste')
+    submit = SubmitField('Submit')
 
 @app.route('/')
 def index():
@@ -31,27 +38,27 @@ def index():
     Returns:
         str: Rendered HTML content for the index page.
     """
-    return render_template('homepage.html')
+    return render_template('service_page.html')
 
 def get_poste_from_backend(lon, lat, radius):
-    backend_url = f'http://backend/poste?lon={lat}&lat={lon}&raggio={radius}'  # Aggiustato il formato dell'URL
+    backend_url = f'http://backend/poste?lon={lat}&lat={lon}&radius={radius}'  # Aggiustato il formato dell'URL
     response = requests.get(backend_url)
     response.raise_for_status()
     return response.json()
 
 def get_farmacie_from_backend(lon, lat, radius):
-    backend_url = f'http://backend/farmacie?lon={lat}&lat={lon}&raggio={radius}'
+    backend_url = f'http://backend/farmacie?lon={lat}&lat={lon}&radius={radius}'
     response = requests.get(backend_url)
     response.raise_for_status()
     return response.json()
 
 def get_esercizi_from_backend(lon, lat, radius):
-    backend_url = f'http://backend/esercizi?lon={lat}&lat={lon}&raggio={radius}'
+    backend_url = f'http://backend/esercizi?lon={lat}&lat={lon}&radius={radius}'
     response = requests.get(backend_url)
     response.raise_for_status()
     return response.json()
 
-@app.route('/internal', methods=['GET', 'POST'])
+@app.route('/internal')
 def internal():
     """
     Render the internal page.
@@ -60,8 +67,10 @@ def internal():
         str: Rendered HTML content for the index page.
     """
     form = QueryForm()
+    poste_data=get_poste_from_backend(45.464098,9.191926,1000)
+    esercizi_data=get_esercizi_from_backend(45.464098,9.191926,1000)
     error_message = None  # Initialize error message
-
+    return render_template('service_page.html', poste_data=poste_data, esercizi_data=esercizi_data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
