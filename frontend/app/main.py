@@ -26,8 +26,8 @@ BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 class QueryForm(FlaskForm):
     address = StringField('Address', validators=[DataRequired()])
-    radius = FloatField('Raggio', validators=[DataRequired()])
-    category = SelectField('Categoria', choices=[('poste', 'Poste'), ('farmacie', 'Farmacie'), ('esercizi', 'Esercizi')], default='poste')
+    radius = FloatField('Radius', validators=[DataRequired()])
+    category = SelectField('Category', choices=[('poste', 'Poste'), ('farmacie', 'Farmacie'), ('esercizi', 'Esercizi')], default='poste')
     submit = SubmitField('Submit')
 
 @app.route('/')
@@ -92,7 +92,7 @@ def get_lat_lon_from_address(address):
         print(f"Errore nella richiesta di geocodifica: {data['status']}")
         return None, None
 
-@app.route('/servicepage')
+@app.route('/servicepage',methods=['GET', 'POST'])
 def servicepage():
     """
     Render the internal page.
@@ -118,16 +118,16 @@ def servicepage():
             if category == "poste":
                 data=get_poste_from_backend(lat,lon,radius)
             elif category == "farmacie":
-                data=get_farmacie_from_backend(lat,lon,raius)
+                data=get_farmacie_from_backend(lat,lon,radius)
             elif category == "esercizi":
                 data=get_esercizi_from_backend(lat,lon,radius)
             else:
                 error_message = 'Categoria non supportata.'
-                return render_template('internal.html', form=form, error_message=error_message, apiKey=google_maps_api_key)
-            return render_template('internal.html', categoria=categoria, form=form, address=address, lat=lat, lon=lon, data=data, apiKey=google_maps_api_key)
+                return render_template('servicepage.html', form=form, error_message=error_message, apiKey=google_maps_api_key)
+            return render_template('servicepage.html', category=category, form=form, address=address, lat=lat, lon=lon, data=data, apiKey=google_maps_api_key)
         else: 
             error_message = "Errore nella geocodifica dell'indirizzo. L'indirizzo deve essere all'interno della città di Milano"
-    return render_template('internal.html', form=form, error_message=error_message, apiKey=google_maps_api_key)
+    return render_template('servicepage.html', form=form, error_message=error_message, apiKey=google_maps_api_key)
         
 
 
