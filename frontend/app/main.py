@@ -26,8 +26,8 @@ BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 class QueryForm(FlaskForm):
     address = StringField('Address', validators=[DataRequired()])
-    raggio = FloatField('Raggio', validators=[DataRequired()])
-    categoria = SelectField('Categoria', choices=[('poste', 'Poste'), ('farmacie', 'Farmacie'), ('esercizi', 'Esercizi')], default='poste')
+    radius = FloatField('Raggio', validators=[DataRequired()])
+    category = SelectField('Categoria', choices=[('poste', 'Poste'), ('farmacie', 'Farmacie'), ('esercizi', 'Esercizi')], default='poste')
     submit = SubmitField('Submit')
 
 @app.route('/')
@@ -100,11 +100,37 @@ def servicepage():
     Returns:
         str: Rendered HTML content for the index page.
     """
+
+
     form = QueryForm()
-    poste_data=get_poste_from_backend(45.464098,9.191926,1000)
-    esercizi_data=get_esercizi_from_backend(45.464098,9.191926,1000)
+    #poste_data=get_poste_from_backend(45.464098,9.191926,1000)
+    #esercizi_data=get_esercizi_from_backend(45.464098,9.191926,1000)
     error_message = None  # Initialize error message
-    return render_template('servicepage.html', form=form, poste_data=poste_data, esercizi_data=esercizi_data)
+    #return render_template('servicepage.html', form=form, poste_data=poste_data, esercizi_data=esercizi_data)
+    if form.validate_on_submit():
+        address= form.address.data
+        radius = form.radius.data
+        category=form.category.data
+        print(address)
+
+        lat, lon = get_lat_lon_from_address(address)
+        if lat is not None and lon is not None:
+            if category == "poste":
+                data=get_poste_from_backend(lat,lon,radius)
+            elif category == "farmacie":
+                data=get_farmacie_from_backend(lat,lon,raius)
+            elif category == "esercizi":
+                data=get_esercizi_from_backend(lat,lon,radius)
+            else:
+                error_message = 'Categoria non supportata.'
+                return render_template('internal.html', form=form, error_message=error_message, apiKey=google_maps_api_key)
+            return render_template('internal.html', categoria=categoria, form=form, address=address, lat=lat, lon=lon, data=data, apiKey=google_maps_api_key)
+        else: 
+            error_message = "Errore nella geocodifica dell'indirizzo. L'indirizzo deve essere all'interno della città di Milano"
+    return render_template('internal.html', form=form, error_message=error_message, apiKey=google_maps_api_key)
+        
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
