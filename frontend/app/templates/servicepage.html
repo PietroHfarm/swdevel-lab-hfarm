@@ -90,6 +90,15 @@
             title: title
         });
 
+        var popupContent = '<div class="popup"><strong>' + title + '</strong><br>' + content + '</div>';
+
+        var infowindow = new google.maps.InfoWindow({
+            content: popupContent
+        });
+
+        marker.addListener('click', function() {
+            infowindow.open(map, marker);
+
             var listItem = document.querySelector('[data-lat="' + marker.getPosition().lat() + '"][data-lon="' + marker.getPosition().lng() + '"]');
             if (listItem) {
                 listItem.scrollIntoView({ behavior: 'smooth' });
