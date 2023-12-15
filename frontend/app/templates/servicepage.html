@@ -32,19 +32,49 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-4">
-        {% if categoria == "poste" %}
-            <div class="overflow-auto" style="max-height: 400px;">
-                <h5>Poste</h5>
-                <ul class="list-group" id="poste-list">
-                    {% if data %}
-                        {% for poste in data['poste_nel_raggio'] %}
-                            <li class="list-group-item" data-lat="{{ poste['LAT_Y_4326'] }}" data-lon="{{ poste['LONG_X_4326'] }}">
-                                {{ poste['Ente'] }} - {{ poste['Indirizzo'] }}
-                            </li>
-                        {% endfor %}
-                    {% endif %}
-                </ul>
-            </div>
+            {% if categoria == "poste" %}
+                <div class="overflow-auto" style="max-height: 400px;">
+                    <h5>Poste</h5>
+                    <ul class="list-group" id="poste-list">
+                        {% if data %}
+                            {% for poste in data['poste_nel_raggio'] %}
+                                <li class="list-group-item" data-lat="{{ poste['LAT_Y_4326'] }}" data-lon="{{ poste['LONG_X_4326'] }}">
+                                    {{ poste['Ente'] }} - {{ poste['Indirizzo'] }}
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            {% elif categoria == "farmacie" %}
+                <div class="overflow-auto" style="max-height: 400px;">
+                    <h5>Farmacie</h5>
+                    <ul class="list-group" id="farmacie-list">
+                        {% if data  %}
+                            {% for farmacia in data['poste_nel_raggio'] %}
+                                <li class="list-group-item" data-lat="{{ farmacia['LATITUDINE'] }}" data-lon="{{ farmacia['LONGITUDINE'] }}">
+                                    {{ farmacia['DESCRIZIONE_FARMACIA'] }} - {{ farmacia['INDIRIZZO'] }}
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            {% elif categoria == "esercizi" %}
+                <div class="overflow-auto" style="max-height: 400px;">
+                    <h5>Esercizi</h5>
+                    <ul class="list-group" id="esercizi-list">
+                        {% if data %}
+                            {% for esercizio in data['poste_nel_raggio'] %}
+                                <li class="list-group-item" data-lat="{{ esercizio['LAT_WGS84'] }}" data-lon="{{ esercizio['LONG_WGS84'] }}">
+                                    {{ esercizio['denominazione_pe'] }} - {{ esercizio['Ubicazione'] }}
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            {% else %}
+                <p>Categoria non supportata</p>
+            {% endif %}
+        </div>
     </div>
 </div>
 
