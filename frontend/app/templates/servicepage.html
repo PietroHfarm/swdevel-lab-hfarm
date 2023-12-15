@@ -109,6 +109,7 @@
                 listItem.scrollIntoView({ behavior: 'smooth' });
             }
         };
+    }
 
     function createPopupHandler(map, markers) {
     return function (e) {
@@ -122,7 +123,18 @@
                 var marker = markers.find(function (marker) {
                     return marker.getPosition().lat() === lat && marker.getPosition().lng() === lon;
                 });
-            }
-        };
+                //Center map and infowindow
+                if (marker) {
+                map.setCenter(marker.getPosition());
+
+                markers.forEach(function (m) {
+                    m.infowindow.close();
+                });
+
+                marker.infowindow.open(map, marker);
+                }
+            };
+        }
+    }
 </script>   
 {% endblock %}
