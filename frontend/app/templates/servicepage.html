@@ -3,45 +3,49 @@
 {% block title %} Internal of Frontend {% endblock %}
 
 {% block content %}
-<form action="{{ url_for('servicepage')}}" method="POST" class="mt-3">
-    {{ form.hidden_tag() }}
-
-    <div class="mb-3">
-        {{ form.address.label(class="form-label") }}
-        {{ form.address(class="form-control", placeholder="Enter Address", id="autocomplete") }}
-    </div>
-
-    <div class="mb-3">
-        {{ form.raggio.label(class="form-label") }}
-        {{ form.raggio(class="form-control", placeholder="Enter Raggio") }}
-    </div>
-
-    <div class="mb-3">
-        {{ form.categoria.label(class="form-label") }}
-        {{ form.categoria(class="form-control") }}
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
 </div>
-    <div class="container mt-5">
-        <h1>Hello, Internal Page!</h1>
-        <p>This is an internal page for interacting with a FastAPI backend.</p>
+<div class="container mt-5">
+    <h1>Hello, Internal Page!</h1>
+    <p>This is an internal page for interacting with a FastAPI backend.</p>
+    <form action="{{ url_for('servicepage')}}" method="POST" class="mt-3">
+        {{ form.hidden_tag() }}
 
-        <!-- WTForms Form to get input from the user -->
-        <h1>poste data </h1>
-        <ul>
-            {% for poste in poste_data['poste']%}
-                <li>{{poste['Ente']}} - {{poste['Indirizzo']}}</li>
-            {% endfor %}
-            {% for esercizi in esercizi_data['esercizi']%}
-                <li>{{esercizi['denominazione_pe']}} - {{esercizi['Ubicazione']}}</li>
-            {% endfor %}
-        </ul>
-        
+        <div class="mb-3">
+            {{ form.address.label(class="form-label") }}
+            {{ form.address(class="form-control", placeholder="Enter Address", id="autocomplete") }}
+        </div>
 
+        <div class="mb-3">
+            {{ form.raggio.label(class="form-label") }}
+            {{ form.raggio(class="form-control", placeholder="Enter Raggio") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.categoria.label(class="form-label") }}
+            {{ form.categoria(class="form-control") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+        {% if categoria == "poste" %}
+            <div class="overflow-auto" style="max-height: 400px;">
+                <h5>Poste</h5>
+                <ul class="list-group" id="poste-list">
+                    {% if data %}
+                        {% for poste in data['poste_nel_raggio'] %}
+                            <li class="list-group-item" data-lat="{{ poste['LAT_Y_4326'] }}" data-lon="{{ poste['LONG_X_4326'] }}">
+                                {{ poste['Ente'] }} - {{ poste['Indirizzo'] }}
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
     </div>
-
+</div>
 
 {% endblock %}
