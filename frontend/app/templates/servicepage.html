@@ -175,7 +175,6 @@
                             }
                         });
                         
-                
                     {% endfor %}
                 {% elif categoria == "farmacie" %}
                     {% for farmacia in data['farmacie_in_radius'] %}
@@ -231,13 +230,22 @@
                             if (listItem) {
                                 listItem.scrollIntoView({ behavior: 'smooth' });
                             }
-                        });                        
+                        }); 
+                        marker.infowindow = infowindow;                       
                     {% endfor %}
                 {% endif %}
             {% endif %}
+            
+            // Inizializza Places Autocomplete 
+            var input = document.getElementById('autocomplete');
+            var autocomplete = new google.maps.places.Autocomplete(input, {
+                types: ['geocode'],
+                componentRestrictions: {country: 'IT'} 
+            });
         }
     
     }
 
 </script>   
+<script src="https://maps.googleapis.com/maps/api/js?key={{apiKey}}&libraries=places,geometry&callback=initMap" defer></script>
 {% endblock %}
