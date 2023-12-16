@@ -110,6 +110,32 @@
     
             }
         };
+                           
+    function createPopupHandler(map, markers) {
+    return function (e) {
+        var listItem = e.target.closest('.list-group-item');
+        if (listItem) {
+            // Recupera le coordinate dalla lista
+            var lat = parseFloat(listItem.getAttribute('data-lat'));
+            var lon = parseFloat(listItem.getAttribute('data-lon'));
+
+                // Trova il marker corrispondente
+                var marker = markers.find(function (marker) {
+                    return marker.getPosition().lat() === lat && marker.getPosition().lng() === lon;
+                });
+                //Center map and infowindow
+                if (marker) {
+                map.setCenter(marker.getPosition());
+
+                markers.forEach(function (m) {
+                    m.infowindow.close();
+                });
+
+                marker.infowindow.open(map, marker);
+                }
+            };
+        }
+    }
         
         function initMap() {
         if (typeof google !== 'undefined') {
@@ -156,9 +182,6 @@
         }
     
     }
-            
 
-        
-    
 </script>   
 {% endblock %}
