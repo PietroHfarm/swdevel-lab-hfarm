@@ -40,7 +40,7 @@
                     <h5>Poste</h5>
                     <ul class="list-group" id="poste-list">
                         {% if data %}
-                            {% for poste in data['poste_nel_raggio'] %}
+                            {% for poste in data['poste_in_radius'] %}
                                 <li class="list-group-item" data-lat="{{ poste['LAT_Y_4326'] }}" data-lon="{{ poste['LONG_X_4326'] }}">
                                     {{ poste['Ente'] }} - {{ poste['Indirizzo'] }}
                                 </li>
@@ -53,7 +53,7 @@
                     <h5>Farmacie</h5>
                     <ul class="list-group" id="farmacie-list">
                         {% if data  %}
-                            {% for farmacia in data['poste_nel_raggio'] %}
+                            {% for farmacia in data['farmacie_in_radius'] %}
                                 <li class="list-group-item" data-lat="{{ farmacia['LATITUDINE'] }}" data-lon="{{ farmacia['LONGITUDINE'] }}">
                                     {{ farmacia['DESCRIZIONE_FARMACIA'] }} - {{ farmacia['INDIRIZZO'] }}
                                 </li>
@@ -66,7 +66,7 @@
                     <h5>Esercizi</h5>
                     <ul class="list-group" id="esercizi-list">
                         {% if data %}
-                            {% for esercizio in data['poste_nel_raggio'] %}
+                            {% for esercizio in data['esercizi_in_radius'] %}
                                 <li class="list-group-item" data-lat="{{ esercizio['LAT_WGS84'] }}" data-lon="{{ esercizio['LONG_WGS84'] }}">
                                     {{ esercizio['denominazione_pe'] }} - {{ esercizio['Ubicazione'] }}
                                 </li>
@@ -109,35 +109,36 @@
                 listItem.scrollIntoView({ behavior: 'smooth' });
     
             }
-        };
+        });
+    }
                            
     function createPopupHandler(map, markers) {
-    return function (e) {
-        var listItem = e.target.closest('.list-group-item');
-        if (listItem) {
+        return function (e) {
+            var listItem = e.target.closest('.list-group-item');
+            if (listItem) {
             // Recupera le coordinate dalla lista
-            var lat = parseFloat(listItem.getAttribute('data-lat'));
-            var lon = parseFloat(listItem.getAttribute('data-lon'));
+                var lat = parseFloat(listItem.getAttribute('data-lat'));
+                var lon = parseFloat(listItem.getAttribute('data-lon'));
 
                 // Trova il marker corrispondente
-                var marker = markers.find(function (marker) {
-                    return marker.getPosition().lat() === lat && marker.getPosition().lng() === lon;
+            var marker = markers.find(function (marker) {
+                return marker.getPosition().lat() === lat && marker.getPosition().lng() === lon;
                 });
                 //Center map and infowindow
-                if (marker) {
+            if (marker) {
                 map.setCenter(marker.getPosition());
 
                 markers.forEach(function (m) {
                     m.infowindow.close();
                 });
 
-                marker.infowindow.open(map, marker);
+                    marker.infowindow.open(map, marker);
                 }
-            };
-        }
+            }
+        };
     }
         
-        function initMap() {
+    function initMap() {
         if (typeof google !== 'undefined') {
             // Inizializza la mappa
             var map = new google.maps.Map(document.getElementById('map'), {
@@ -175,6 +176,7 @@
                             }
                         });
                         
+                        marker.infowindow = infowindow;
                     {% endfor %}
                 {% elif categoria == "farmacie" %}
                     {% for farmacia in data['farmacie_in_radius'] %}
@@ -203,6 +205,8 @@
                                 listItem.scrollIntoView({ behavior: 'smooth' });
                             }
                         });
+                        
+                        marker.infowindow = infowindow;
 
                     {% endfor %}
                 {% elif categoria == "esercizi" %}
