@@ -148,7 +148,7 @@
             // Aggiungi i marker dalla lista delle poste o delle farmacie o degli esercizi
             {% if data %}
                 {% if categoria == "poste" %}
-                    {% for poste in data['poste_nel_raggio'] %}
+                    {% for poste in data['poste_in_radius'] %}
                         var marker = new google.maps.Marker({
                             position: {lat: {{ poste['LAT_Y_4326'] }}, lng: {{ poste['LONG_X_4326'] }}},
                             map: map,
@@ -156,26 +156,44 @@
                         });
                         markers.push(marker);
                         
+                        var popupContent = '<div class="popup"><strong>{{ poste['Ente'] }}</strong><br>{{ poste['Indirizzo'] }}</div>';
+    
+                        var infowindow = new google.maps.InfoWindow({
+                            content: popupContent
+                        });
+                        
                 
                     {% endfor %}
                 {% elif categoria == "farmacie" %}
-                    {% for farmacia in data['poste_nel_raggio'] %}
+                    {% for farmacia in data['farmacie_in_radius'] %}
                         var marker = new google.maps.Marker({
                             position: {lat: {{ farmacia['LATITUDINE'] }}, lng: {{ farmacia['LONGITUDINE'] }}},
                             map: map,
                             title: '{{ farmacia['DESCRIZIONE_FARMACIA'] }} - {{ farmacia['INDIRIZZO'] }}'
                         });
                         markersFarmacie.push(marker);
+                       
+                        var popupContent = '<div class="popup"><strong>{{ farmacia['DESCRIZIONE_FARMACIA'] }}</strong><br>{{ farmacia['INDIRIZZO'] }}</div>';
+                
+                        var infowindow = new google.maps.InfoWindow({
+                            content: popupContent
+                        });
 
                     {% endfor %}
                 {% elif categoria == "esercizi" %}
-                    {% for esercizio in data['poste_nel_raggio'] %}
+                    {% for esercizio in data['esercizi_in_radius'] %}
                         var marker = new google.maps.Marker({
                             position: {lat: {{ esercizio['LAT_WGS84'] }}, lng: {{ esercizio['LONG_WGS84'] }}},
                             map: map,
                             title: '{{ esercizio['denominazione_pe'] }} - {{ esercizio['Ubicazione'] }}'
                         });
                         markersEsercizi.push(marker);
+                        
+                        var popupContent = '<div class="popup"><strong>{{ esercizio['denominazione_pe'] }}</strong><br>{{ esercizio['Ubicazione'] }}</div>';
+                
+                        var infowindow = new google.maps.InfoWindow({
+                            content: popupContent
+                        });
                     {% endfor %}
                 {% endif %}
             {% endif %}
