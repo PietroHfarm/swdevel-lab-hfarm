@@ -107,7 +107,58 @@
             var listItem = document.querySelector('[data-lat="' + marker.getPosition().lat() + '"][data-lon="' + marker.getPosition().lng() + '"]');
             if (listItem) {
                 listItem.scrollIntoView({ behavior: 'smooth' });
+    
             }
         };
+        
+        function initMap() {
+        if (typeof google !== 'undefined') {
+            // Inizializza la mappa
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: {{ lat if lat else 0 }}, lng: {{ lon if lon else 0 }}},
+                zoom: 12 // Imposta il livello di zoom desiderato
+            });
+
+            // Aggiungi i marker dalla lista delle poste o delle farmacie o degli esercizi
+            {% if data %}
+                {% if categoria == "poste" %}
+                    {% for poste in data['poste_nel_raggio'] %}
+                        var marker = new google.maps.Marker({
+                            position: {lat: {{ poste['LAT_Y_4326'] }}, lng: {{ poste['LONG_X_4326'] }}},
+                            map: map,
+                            title: '{{ poste['Ente'] }} - {{ poste['Indirizzo'] }}'
+                        });
+                        markers.push(marker);
+                        
+                
+                    {% endfor %}
+                {% elif categoria == "farmacie" %}
+                    {% for farmacia in data['poste_nel_raggio'] %}
+                        var marker = new google.maps.Marker({
+                            position: {lat: {{ farmacia['LATITUDINE'] }}, lng: {{ farmacia['LONGITUDINE'] }}},
+                            map: map,
+                            title: '{{ farmacia['DESCRIZIONE_FARMACIA'] }} - {{ farmacia['INDIRIZZO'] }}'
+                        });
+                        markersFarmacie.push(marker);
+
+                    {% endfor %}
+                {% elif categoria == "esercizi" %}
+                    {% for esercizio in data['poste_nel_raggio'] %}
+                        var marker = new google.maps.Marker({
+                            position: {lat: {{ esercizio['LAT_WGS84'] }}, lng: {{ esercizio['LONG_WGS84'] }}},
+                            map: map,
+                            title: '{{ esercizio['denominazione_pe'] }} - {{ esercizio['Ubicazione'] }}'
+                        });
+                        markersEsercizi.push(marker);
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        }
+    
+    }
+            
+
+        
+    
 </script>   
 {% endblock %}
