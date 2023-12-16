@@ -161,6 +161,19 @@
                         var infowindow = new google.maps.InfoWindow({
                             content: popupContent
                         });
+                        marker.addListener('click', function() {
+                            
+                            markers.forEach(function(m) {
+                                m.infowindow.close();
+                            });
+                       
+                            infowindow.open(map, marker);
+    
+                            var listItem = document.querySelector('[data-lat="' + marker.getPosition().lat() + '"][data-lon="' + marker.getPosition().lng() + '"]');
+                            if (listItem) {
+                                listItem.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        });
                         
                 
                     {% endfor %}
@@ -178,6 +191,19 @@
                         var infowindow = new google.maps.InfoWindow({
                             content: popupContent
                         });
+                                        
+                        marker.addListener('click', function() {
+                            markersFarmacie.forEach(function(m) {
+                                m.infowindow.close();
+                            });
+
+                            infowindow.open(map, marker);
+                
+                            var listItem = document.querySelector('[data-lat="' + marker.getPosition().lat() + '"][data-lon="' + marker.getPosition().lng() + '"]');
+                            if (listItem) {
+                                listItem.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        });
 
                     {% endfor %}
                 {% elif categoria == "esercizi" %}
@@ -194,6 +220,18 @@
                         var infowindow = new google.maps.InfoWindow({
                             content: popupContent
                         });
+                        marker.addListener('click', function() {
+                            markersEsercizi.forEach(function(m) {
+                                m.infowindow.close();
+                            });
+                
+                            infowindow.open(map, marker);
+                
+                            var listItem = document.querySelector('[data-lat="' + marker.getPosition().lat() + '"][data-lon="' + marker.getPosition().lng() + '"]');
+                            if (listItem) {
+                                listItem.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        });                        
                     {% endfor %}
                 {% endif %}
             {% endif %}
