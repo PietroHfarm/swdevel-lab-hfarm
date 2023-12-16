@@ -35,12 +35,12 @@
             <div id="map" style="height: 400px; width: 100%;"></div>
         </div>
         <div class="col-md-4">
-            {% if categoria == "poste" %}
+            {% if category == "poste" %}
                 <div class="overflow-auto" style="max-height: 400px;">
                     <h5>Poste</h5>
                     <ul class="list-group" id="poste-list">
                         {% if data %}
-                            {% for poste in data['poste_in_radius'] %}
+                            {% for poste in data['poste'] %}
                                 <li class="list-group-item" data-lat="{{ poste['LAT_Y_4326'] }}" data-lon="{{ poste['LONG_X_4326'] }}">
                                     {{ poste['Ente'] }} - {{ poste['Indirizzo'] }}
                                 </li>
@@ -48,12 +48,12 @@
                         {% endif %}
                     </ul>
                 </div>
-            {% elif categoria == "farmacie" %}
+            {% elif category == "farmacie" %}
                 <div class="overflow-auto" style="max-height: 400px;">
                     <h5>Farmacie</h5>
                     <ul class="list-group" id="farmacie-list">
                         {% if data  %}
-                            {% for farmacia in data['farmacie_in_radius'] %}
+                            {% for farmacia in data['farmacie'] %}
                                 <li class="list-group-item" data-lat="{{ farmacia['LATITUDINE'] }}" data-lon="{{ farmacia['LONGITUDINE'] }}">
                                     {{ farmacia['DESCRIZIONE_FARMACIA'] }} - {{ farmacia['INDIRIZZO'] }}
                                 </li>
@@ -61,12 +61,12 @@
                         {% endif %}
                     </ul>
                 </div>
-            {% elif categoria == "esercizi" %}
+            {% elif category == "esercizi" %}
                 <div class="overflow-auto" style="max-height: 400px;">
                     <h5>Esercizi</h5>
                     <ul class="list-group" id="esercizi-list">
                         {% if data %}
-                            {% for esercizio in data['esercizi_in_radius'] %}
+                            {% for esercizio in data['esercizi'] %}
                                 <li class="list-group-item" data-lat="{{ esercizio['LAT_WGS84'] }}" data-lon="{{ esercizio['LONG_WGS84'] }}">
                                     {{ esercizio['denominazione_pe'] }} - {{ esercizio['Ubicazione'] }}
                                 </li>
@@ -75,7 +75,7 @@
                     </ul>
                 </div>
             {% else %}
-                <p>Categoria non supportata</p>
+                <p>Category not supported</p>
             {% endif %}
         </div>
     </div>
@@ -148,8 +148,8 @@
 
             // Aggiungi i marker dalla lista delle poste o delle farmacie o degli esercizi
             {% if data %}
-                {% if categoria == "poste" %}
-                    {% for poste in data['poste_in_radius'] %}
+                {% if category == "poste" %}
+                    {% for poste in data['poste'] %}
                         var marker = new google.maps.Marker({
                             position: {lat: {{ poste['LAT_Y_4326'] }}, lng: {{ poste['LONG_X_4326'] }}},
                             map: map,
@@ -178,8 +178,8 @@
                         
                         marker.infowindow = infowindow;
                     {% endfor %}
-                {% elif categoria == "farmacie" %}
-                    {% for farmacia in data['farmacie_in_radius'] %}
+                {% elif category == "farmacie" %}
+                    {% for farmacia in data['farmacie'] %}
                         var marker = new google.maps.Marker({
                             position: {lat: {{ farmacia['LATITUDINE'] }}, lng: {{ farmacia['LONGITUDINE'] }}},
                             map: map,
@@ -209,8 +209,8 @@
                         marker.infowindow = infowindow;
 
                     {% endfor %}
-                {% elif categoria == "esercizi" %}
-                    {% for esercizio in data['esercizi_in_radius'] %}
+                {% elif category == "esercizi" %}
+                    {% for esercizio in data['esercizi'] %}
                         var marker = new google.maps.Marker({
                             position: {lat: {{ esercizio['LAT_WGS84'] }}, lng: {{ esercizio['LONG_WGS84'] }}},
                             map: map,

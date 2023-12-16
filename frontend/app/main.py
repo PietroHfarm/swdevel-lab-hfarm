@@ -41,7 +41,7 @@ def index():
     return render_template('homepage.html')
 
 def get_poste_from_backend(lon, lat, radius):
-    backend_url = f'http://backend/poste?lat={lat}&lon={lon}&radius={radius}'  # Aggiustato il formato dell'URL
+    backend_url = f'http://backend/poste?lat={lon}&lon={lat}&radius={radius}'  # Aggiustato il formato dell'URL
     try:
         response = requests.get(backend_url)
         response.raise_for_status()
@@ -51,7 +51,7 @@ def get_poste_from_backend(lon, lat, radius):
         return {'error': 'Error'}
 
 def get_farmacie_from_backend(lon, lat, radius):
-    backend_url = f'http://backend/farmacie?lat={lat}&lon={lon}&radius={radius}'
+    backend_url = f'http://backend/farmacie?lat={lon}&lon={lat}&radius={radius}'
     try:
         response = requests.get(backend_url)
         response.raise_for_status()
@@ -61,7 +61,7 @@ def get_farmacie_from_backend(lon, lat, radius):
         return {'error': 'Error'}
 
 def get_esercizi_from_backend(lon, lat, radius):
-    backend_url = f'http://backend/esercizi?lat={lat}&lon={lon}&radius={radius}'
+    backend_url = f'http://backend/esercizi?lat={lon}&lon={lat}&radius={radius}'
     try:
         response = requests.get(backend_url)
         response.raise_for_status()
@@ -124,6 +124,7 @@ def servicepage():
             else:
                 error_message = 'Categoria non supportata.'
                 return render_template('servicepage.html', form=form, error_message=error_message, apiKey=google_maps_api_key)
+            print(data)
             return render_template('servicepage.html', category=category, form=form, address=address, lat=lat, lon=lon, data=data, apiKey=google_maps_api_key)
         else: 
             error_message = "Errore nella geocodifica dell'indirizzo. L'indirizzo deve essere all'interno della città di Milano"
