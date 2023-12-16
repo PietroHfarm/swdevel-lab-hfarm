@@ -16,34 +16,8 @@ pytest --cov=app --cov-report=html tests/
 client = TestClient(app)
 
 
-def test_read_main():
-    response = client.get("/")
+def test_poste():
+    response = client.get("/poste?lon=9.189982&lat=45.4642035&radius=300")
     assert response.status_code == 200
-    assert response.json() == {"Hello": "World"}
+    assert response.json() == {"poste":[{"Ente":"Ufficio PT","Sportello":"","Indirizzo":"VIA MAZZINI GIUSEPPE, 15","Telefono":"02-86396911","Fax":"02-72000087","CAP":"20123","MUNICIPIO":"1","ID_NIL":"1","NIL":"DUOMO","LONG_X_4326":"9.188937000000067","LAT_Y_4326":"45.461898000000076","Location":"(45.461898000000076, 9.188937000000067)"}]}
 
-
-def test_success_read_item():
-    response = client.get("/query/Albert Einstein")
-    assert response.status_code == 200
-    assert response.json() == {"person_name": 'Albert Einstein', 
-                               "birthday": '03/14/1879'}
-
-
-""" def test_fail_read_item():
-    response = client.get("/query/Pippo")
-    assert response.status_code == 200
-    assert response.json() == {"error": "Person not found"} """
-
-
-# The following will generate an error in pycheck
-""" def test_success_read_item_module():
-    response = client.get("/module/search/Albert Einstein")
-    assert response.status_code == 200
-    assert response.json() == {"Albert Einstein's birthday is 03/14/1879."} """
-
-
-# The following is correct, can you spot the diffence?
-def test_success_read_item_module():
-    response = client.get("/module/search/Albert Einstein")
-    assert response.status_code == 200
-    assert response.json() == ["Albert Einstein's birthday is 03/14/1879."]

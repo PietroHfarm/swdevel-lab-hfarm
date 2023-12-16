@@ -10,8 +10,8 @@ from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
 import csv
-from mymodules.csv_reading_function import leggi_dati_da_csv
-from mymodules.distance_function import calcola_distanza
+from .mymodules.csv_reading_function import leggi_dati_da_csv
+from .mymodules.distance_function import calcola_distanza
 
 app = FastAPI()
 
@@ -31,7 +31,7 @@ def get_poste (lat: float = Query(0, title='Latitude', description='Default lati
               lon: float = Query(0, title='Longitude', description='Default longitude'),
               radius: float = Query(100, title='Radius', description='Radius in meters')
 ):
-    poste_data=leggi_dati_da_csv("./poste.csv")
+    poste_data=leggi_dati_da_csv("/app/app/poste.csv")
 
     poste_in_radius = []
     for poste in poste_data:
