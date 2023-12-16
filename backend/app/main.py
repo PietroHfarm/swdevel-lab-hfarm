@@ -46,7 +46,7 @@ def get_farmacie(lat: float = Query(0, title='Latitude', description='Default la
               lon: float = Query(0, title='Longitude', description='Default longitude'),
               radius: float = Query(100, title='Radius', description='Radius in meters')
 ):
-    farmacie_data=leggi_dati_da_csv('./farmacie.csv')
+    farmacie_data=leggi_dati_da_csv('/app/app/farmacie.csv')
 
     farmacie_in_radius = []
     for farmacie in farmacie_data:
@@ -61,7 +61,7 @@ def get_esercizi (lat: float = Query(0, title='Latitude', description='Default l
               lon: float = Query(0, title='Longitude', description='Default longitude'),
               radius: float = Query(100, title='Radius', description='Radius in meters')
 ):
-    esercizi_data=leggi_dati_da_csv('./esercizi1.csv')
+    esercizi_data=leggi_dati_da_csv('/app/app/esercizi1.csv')
 
     esercizi_in_radius= []
     for esercizi in esercizi_data:
