@@ -31,6 +31,32 @@ def read_root():
 
 
 @app.get('/poste')
+"""
+Retrieve postal data within a specified radius 
+from given latitude and longitude.
+
+Parameters:
+    - lat (float): Latitude coordinate. Defaults to 0 if not provided.
+    - lon (float): Longitude coordinate. Defaults to 0 if not provided.
+    - raggio (float): Radius default to 100 meters
+    for filtering postal data.
+
+Returns:
+    - dict: JSON response containing filtered
+    postal data within the specified radius.
+
+Algorithm:
+    1. Read data from the CSV file using the function leggi_dati_da_csv.
+    2. Filter postal data within the specified radius:
+       - Iterate through postal data.
+       - Calculate the distance between provided 
+       coordinates and postal data coordinates.
+       - Add postal data falling within the specified 
+       radius to the result.
+    3. Return the filtered postal data within the radius as a JSON response.
+We did the same for the 3 services.
+"""
+
 def get_poste(lat: float = Query(0, title='Latitude',
                                  description='Default latitude'),
               lon: float = Query(0, title='Longitude',
