@@ -5,7 +5,7 @@ This module defines a FastAPI application that serves
 as the backend for the project.
 """
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
@@ -36,8 +36,11 @@ def get_poste (lat: float = Query(0, title='Latitude', description='Default lati
     poste_in_radius = []
     for poste in poste_data:
         distance = calcola_distanza(lat, lon, float(poste['LAT_Y_4326']), float(poste['LONG_X_4326']))
-        if distance <= radius:
-            poste_in_radius.append(poste)
+        if distance is not False:
+            if distance <= radius:
+                poste_in_radius.append(poste)
+        else:
+            raise HTTPException(status_code=400, detail="Distance or radius error")
 
     return{"poste":poste_in_radius}
 
