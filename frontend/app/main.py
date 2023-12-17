@@ -9,6 +9,7 @@ from flask import Flask, render_template
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
+# dotenv package functions to pick the google key
 from dotenv import load_dotenv
 import os
 from wtforms import FloatField, SubmitField, SelectField
@@ -16,6 +17,7 @@ from wtforms.validators import DataRequired
 
 load_dotenv()
 
+# picking the key
 google_maps_api_key = os.getenv('GOOGLE_MAPS_API_KEY')
 
 app = Flask(__name__)
@@ -42,17 +44,38 @@ class QueryForm(FlaskForm):
 @app.route('/')
 def index():
     """
-    Render the index page.
+    Render the homepage page.
 
     Returns:
-        str: Rendered HTML content for the index page.
+        str: Rendered HTML content for the homepage page.
     """
     return render_template('homepage.html')
 
+# following functions create request from backend (with their
+# relatives url) basd on the category wanted
+# if the request goes well everyone receives
+# a file json with data
+
 
 def get_poste_from_backend(lon, lat, radius):
+    """
+    Retrieves 'poste' data from a backend service using provided
+    longitude, latitude, and radius.
 
-    backend_url = f'http://backend/poste?lat={lon}&lon={lat}&radius={radius}'  # Aggiustato il formato dell'URL
+    Parameters:
+    - lon (float): Longitude value.
+    - lat (float): Latitude value.
+    - raggio (float): Radius in meters for the query.
+
+    Returns:
+    - dict: JSON response containing 'poste' data from the backend.
+
+    If an error occurs during the request, it prints an error message
+    and returns a dictionary with an 'error' key.
+    We did the same for farmacie and esercizi
+    """
+# url for the request get fo the backend
+    backend_url = f'http://backend/poste?lat={lon}&lon={lat}&radius={radius}'
     try:
         response = requests.get(backend_url)
         response.raise_for_status()
@@ -84,6 +107,7 @@ def get_esercizi_from_backend(lon, lat, radius):
         return {'error': 'Error'}
 
 
+# using google maps API to extract lat and lon from address
 def get_lat_lon_from_address(address):
 
     geocode_url = f'https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={google_maps_api_key}'
@@ -91,6 +115,8 @@ def get_lat_lon_from_address(address):
     response = requests.get(geocode_url)
     data = response.json()
 
+# if request suceeds, extracts the coordinates and verify if
+# address is within Milan
     if data['status'] == 'OK' and len(data['results']) > 0:
         location = data['results'][0]['geometry']['location']
 
@@ -107,17 +133,28 @@ def get_lat_lon_from_address(address):
         return None, None
 
 
+# route for servicepage, handles both get and post
 @app.route('/servicepage', methods=['GET', 'POST'])
 def servicepage():
     """
-    Render the internal page.
+    Handles GET and POST requests to '/servicepage' route.
+
+    Renders a form for querying locations based on address,
+    radius, and category.
+    Processes form submission, retrieves coordinates from the address,
+    and queries the backend
+    based on the chosen category ('poste', 'farmacie', 'esercizi')
+    within the specified radius.
 
     Returns:
-        str: Rendered HTML content for the index page.
+    - Renders the 'servicepage.html' template with form,
+    address, coordinates, and queried data.
+    - Handles errors and displays error messages if geocoding fails or
+    if the category is not supported.
     """
     form = QueryForm()
     error_message = None  # Initialize error message
-
+# Control for validation of the form
     if form.validate_on_submit():
         address = form.address.data
         radius = form.radius.data
@@ -125,6 +162,7 @@ def servicepage():
         print(address)
 
         lat, lon = get_lat_lon_from_address(address)
+# if the coordinates are valid, proceeds with the request
         if lat is not None and lon is not None:
             if category == "poste":
                 data = get_poste_from_backend(lat, lon, radius)
