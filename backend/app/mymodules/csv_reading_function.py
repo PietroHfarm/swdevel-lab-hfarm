@@ -1,5 +1,6 @@
 import csv
 
+
 def leggi_dati_da_csv(file_path):
     """
     Reads data from a CSV file and returns a list of dictionaries.
@@ -8,7 +9,8 @@ def leggi_dati_da_csv(file_path):
         file_path (str): The path to the CSV file to be read.
 
     Returns:
-        list of dict: A list of dictionaries, where each dictionary 
+        list of dict: A list of dictionaries,
+        where each dictionary
         represents a row from the CSV.
     """
     dati = []

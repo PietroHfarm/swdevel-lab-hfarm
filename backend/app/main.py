@@ -12,7 +12,7 @@ import pandas as pd
 import csv
 from .mymodules.csv_reading_function import leggi_dati_da_csv
 from .mymodules.distance_function import calcola_distanza
-import os 
+import os
 
 app = FastAPI()
 
@@ -32,7 +32,7 @@ def read_root():
 
 @app.get('/poste')
 """
-Retrieve postal data within a specified radius 
+Retrieve postal data within a specified radius
 from given latitude and longitude.
 
 Parameters:
@@ -49,13 +49,14 @@ Algorithm:
     1. Read data from the CSV file using the function leggi_dati_da_csv.
     2. Filter postal data within the specified radius:
        - Iterate through postal data.
-       - Calculate the distance between provided 
+       - Calculate the distance between provided
        coordinates and postal data coordinates.
-       - Add postal data falling within the specified 
+       - Add postal data falling within the specified
        radius to the result.
     3. Return the filtered postal data within the radius as a JSON response.
 We did the same for the 3 services.
 """
+
 
 def get_poste(lat: float = Query(0, title='Latitude',
                                  description='Default latitude'),
