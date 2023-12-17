@@ -51,8 +51,8 @@ def index():
 
 
 def get_poste_from_backend(lon, lat, radius):
-    # Aggiustato il formato dell'URL
-    backend_url = f'http://backend/poste?lat={lat}&lon={lon}&radius={radius}'
+
+    backend_url = f'http://backend/poste?lat={lon}&lon={lat}&radius={radius}'  # Aggiustato il formato dell'URL
     try:
         response = requests.get(backend_url)
         response.raise_for_status()
@@ -63,7 +63,7 @@ def get_poste_from_backend(lon, lat, radius):
 
 
 def get_farmacie_from_backend(lon, lat, radius):
-    backend_url = f'http://backend/farmacie?lat={lat}&lon={lon}&radius={radius}'
+    backend_url = f'http://backend/farmacie?lat={lon}&lon={lat}&radius={radius}'
     try:
         response = requests.get(backend_url)
         response.raise_for_status()
@@ -74,7 +74,7 @@ def get_farmacie_from_backend(lon, lat, radius):
 
 
 def get_esercizi_from_backend(lon, lat, radius):
-    backend_url = f'http://backend/esercizi?lat={lat}&lon={lon}&radius={radius}'
+    backend_url = f'http://backend/esercizi?lat={lon}&lon={lat}&radius={radius}'
     try:
         response = requests.get(backend_url)
         response.raise_for_status()
@@ -134,6 +134,7 @@ def servicepage():
                 data = get_esercizi_from_backend(lat, lon, radius)
             else:
                 error_message = 'Categoria non supportata.'
+
                 return render_template('servicepage.html', form=form,
                                        error_message=error_message,
                                        apiKey=google_maps_api_key)
