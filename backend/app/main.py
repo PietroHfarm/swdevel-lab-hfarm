@@ -12,8 +12,11 @@ import pandas as pd
 import csv
 from .mymodules.csv_reading_function import leggi_dati_da_csv
 from .mymodules.distance_function import calcola_distanza
+import os 
 
 app = FastAPI()
+
+current_file_path = os.path.abspath(__file__)
 
 
 @app.get('/')
