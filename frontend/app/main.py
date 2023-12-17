@@ -124,7 +124,7 @@ def servicepage():
             else:
                 error_message = 'Categoria non supportata.'
                 return render_template('servicepage.html', form=form, error_message=error_message, apiKey=google_maps_api_key)
-            print(data)
+
             return render_template('servicepage.html', category=category, form=form, address=address, lat=lat, lon=lon, data=data, apiKey=google_maps_api_key)
         else: 
             error_message = "Errore nella geocodifica dell'indirizzo. L'indirizzo deve essere all'interno della città di Milano"
