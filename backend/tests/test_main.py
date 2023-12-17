@@ -127,6 +127,6 @@ def test_undefined_route():
     assert response.status_code == 404
 
 
-def test_negative_numbers_in_query():
-    response = client.get("/poste?lon=-50&lat=-50&radius=1000")
+def test_not_in_range():
+    response = client.get("/poste?lon=-100&lat=100&radius=1000")
     assert response.status_code == 400
