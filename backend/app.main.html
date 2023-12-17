@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module app.main</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="app.html"><font color="#ffffff">app</font></a>.main</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/app/app/main.py">/app/app/main.py</a></font></td></tr></table>
+    <p><tt>Backend&nbsp;module&nbsp;for&nbsp;the&nbsp;FastAPI&nbsp;application.<br>
+&nbsp;<br>
+This&nbsp;module&nbsp;defines&nbsp;a&nbsp;FastAPI&nbsp;application&nbsp;that&nbsp;serves<br>
+as&nbsp;the&nbsp;backend&nbsp;for&nbsp;the&nbsp;project.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="csv.html">csv</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-get_esercizi"><strong>get_esercizi</strong></a>(lat: float = Query(0), lon: float = Query(0), radius: float = Query(100))</dt></dl>
+ <dl><dt><a name="-get_farmacie"><strong>get_farmacie</strong></a>(lat: float = Query(0), lon: float = Query(0), radius: float = Query(100))</dt></dl>
+ <dl><dt><a name="-get_poste"><strong>get_poste</strong></a>(lat: float = Query(0), lon: float = Query(0), radius: float = Query(100))</dt><dd><tt>Retrieve&nbsp;postal&nbsp;data&nbsp;within&nbsp;a&nbsp;specified&nbsp;radius<br>
+from&nbsp;given&nbsp;latitude&nbsp;and&nbsp;longitude.<br>
+&nbsp;<br>
+Parameters:<br>
+-&nbsp;lat&nbsp;(float):&nbsp;Latitude&nbsp;coordinate.&nbsp;Defaults&nbsp;to&nbsp;0&nbsp;if&nbsp;not&nbsp;provided.<br>
+-&nbsp;lon&nbsp;(float):&nbsp;Longitude&nbsp;coordinate.&nbsp;Defaults&nbsp;to&nbsp;0&nbsp;if&nbsp;not&nbsp;provided.<br>
+-&nbsp;raggio&nbsp;(float):&nbsp;Radius&nbsp;default&nbsp;to&nbsp;100&nbsp;meters<br>
+for&nbsp;filtering&nbsp;postal&nbsp;data.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;dict:&nbsp;JSON&nbsp;response&nbsp;containing&nbsp;filtered<br>
+postal&nbsp;data&nbsp;within&nbsp;the&nbsp;specified&nbsp;radius.<br>
+&nbsp;<br>
+Algorithm:<br>
+1.&nbsp;Read&nbsp;data&nbsp;from&nbsp;the&nbsp;CSV&nbsp;file&nbsp;using&nbsp;the&nbsp;function&nbsp;leggi_dati_da_csv.<br>
+2.&nbsp;Filter&nbsp;postal&nbsp;data&nbsp;within&nbsp;the&nbsp;specified&nbsp;radius:<br>
+&nbsp;&nbsp;&nbsp;-&nbsp;Iterate&nbsp;through&nbsp;postal&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;-&nbsp;Calculate&nbsp;the&nbsp;distance&nbsp;between&nbsp;provided<br>
+&nbsp;&nbsp;&nbsp;coordinates&nbsp;and&nbsp;postal&nbsp;data&nbsp;coordinates.<br>
+&nbsp;&nbsp;&nbsp;-&nbsp;Add&nbsp;postal&nbsp;data&nbsp;falling&nbsp;within&nbsp;the&nbsp;specified<br>
+&nbsp;&nbsp;&nbsp;radius&nbsp;to&nbsp;the&nbsp;result.<br>
+3.&nbsp;Return&nbsp;the&nbsp;filtered&nbsp;postal&nbsp;data&nbsp;within&nbsp;the&nbsp;radius&nbsp;as&nbsp;a&nbsp;JSON&nbsp;response.<br>
+We&nbsp;did&nbsp;the&nbsp;same&nbsp;for&nbsp;the&nbsp;3&nbsp;services.</tt></dd></dl>
+ <dl><dt><a name="-read_root"><strong>read_root</strong></a>()</dt><dd><tt>Root&nbsp;endpoint&nbsp;for&nbsp;the&nbsp;backend.<br>
+Returns:<br>
+dict:&nbsp;A&nbsp;simple&nbsp;greeting.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>app</strong> = &lt;fastapi.applications.FastAPI object&gt;<br>
+<strong>current_file_path</strong> = '/app/app/main.py'</td></tr></table>
+</body></html>
