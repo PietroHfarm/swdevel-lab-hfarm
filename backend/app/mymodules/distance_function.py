@@ -17,7 +17,7 @@ def calcola_distanza(lat1, lon1, lat2, lon2):
         between the two points if coordinates are valid,
         or False if any latitude or longitude is less than 0.0.
     """
-    if (lat1 < 0.0 or lon1 < 0.0):
-        return False
-    else:
+    if (-90 <= lat1 <= 90 or -90 <= lon1 <= 90):
         return geodesic((lat1, lon1), (lat2, lon2)).meters
+    else:
+        return False
