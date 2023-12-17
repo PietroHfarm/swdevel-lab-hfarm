@@ -5,13 +5,13 @@ This module defines a FastAPI application that serves
 as the backend for the project.
 """
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
 import csv
-from mymodules.csv_reading_function import leggi_dati_da_csv
-from mymodules.distance_function import calcola_distanza
+from .mymodules.csv_reading_function import leggi_dati_da_csv
+from .mymodules.distance_function import calcola_distanza
 
 app = FastAPI()
 
@@ -31,13 +31,16 @@ def get_poste (lat: float = Query(0, title='Latitude', description='Default lati
               lon: float = Query(0, title='Longitude', description='Default longitude'),
               radius: float = Query(100, title='Radius', description='Radius in meters')
 ):
-    poste_data=leggi_dati_da_csv("./poste.csv")
+    poste_data=leggi_dati_da_csv("/app/app/poste.csv")
 
     poste_in_radius = []
     for poste in poste_data:
         distance = calcola_distanza(lat, lon, float(poste['LAT_Y_4326']), float(poste['LONG_X_4326']))
-        if distance <= radius:
-            poste_in_radius.append(poste)
+        if distance is not False:
+            if distance <= radius:
+                poste_in_radius.append(poste)
+        else:
+            raise HTTPException(status_code=400, detail="Distance or radius error")
 
     return{"poste":poste_in_radius}
 
@@ -46,7 +49,7 @@ def get_farmacie(lat: float = Query(0, title='Latitude', description='Default la
               lon: float = Query(0, title='Longitude', description='Default longitude'),
               radius: float = Query(100, title='Radius', description='Radius in meters')
 ):
-    farmacie_data=leggi_dati_da_csv('./farmacie.csv')
+    farmacie_data=leggi_dati_da_csv('/app/app/farmacie.csv')
 
     farmacie_in_radius = []
     for farmacie in farmacie_data:
@@ -61,7 +64,7 @@ def get_esercizi (lat: float = Query(0, title='Latitude', description='Default l
               lon: float = Query(0, title='Longitude', description='Default longitude'),
               radius: float = Query(100, title='Radius', description='Radius in meters')
 ):
-    esercizi_data=leggi_dati_da_csv('./esercizi1.csv')
+    esercizi_data=leggi_dati_da_csv('/app/app/esercizi1.csv')
 
     esercizi_in_radius= []
     for esercizi in esercizi_data:
