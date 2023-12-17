@@ -23,29 +23,36 @@ current_file_path = os.path.abspath(__file__)
 def read_root():
     """
     Root endpoint for the backend.
-
     Returns:
-        dict: A simple greeting.
+    dict: A simple greeting.
     """
     return {"Hello": "World!!"}
 
 
 @app.get('/poste')
-"""
-Retrieve postal data within a specified radius
-from given latitude and longitude.
+def get_poste(lat: float = Query(0, title='Latitude',
+                                 description='Default latitude'),
+              lon: float = Query(0, title='Longitude',
+                                 description='Default longitude'),
+              radius: float = Query(100, title='Radius',
+                                    description='Radius in meters')
+              ):
+                  
+    """
+    Retrieve postal data within a specified radius
+    from given latitude and longitude.
 
-Parameters:
+    Parameters:
     - lat (float): Latitude coordinate. Defaults to 0 if not provided.
     - lon (float): Longitude coordinate. Defaults to 0 if not provided.
     - raggio (float): Radius default to 100 meters
     for filtering postal data.
 
-Returns:
+    Returns:
     - dict: JSON response containing filtered
     postal data within the specified radius.
 
-Algorithm:
+    Algorithm:
     1. Read data from the CSV file using the function leggi_dati_da_csv.
     2. Filter postal data within the specified radius:
        - Iterate through postal data.
@@ -54,17 +61,9 @@ Algorithm:
        - Add postal data falling within the specified
        radius to the result.
     3. Return the filtered postal data within the radius as a JSON response.
-We did the same for the 3 services.
-"""
+    We did the same for the 3 services.
 
-
-def get_poste(lat: float = Query(0, title='Latitude',
-                                 description='Default latitude'),
-              lon: float = Query(0, title='Longitude',
-                                 description='Default longitude'),
-              radius: float = Query(100, title='Radius',
-                                    description='Radius in meters')
-              ):
+    """
     poste_data = leggi_dati_da_csv("/app/app/poste.csv")
 
     poste_in_radius = []
