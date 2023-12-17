@@ -3,7 +3,14 @@
 {% block title %} Internal of Frontend {% endblock %}
 
 {% block content %}
-</div>
+</div> class="container mt-5">
+    <h1>Hello, Servicepage Page!</h1>
+    <p>Here you can put your address, select the radius and the tipe of service you are looking for and the ones within the radius will be dispalyed.</p>
+
+    <!-- Display form errors if any -->
+    {% if error_message %}
+        <p class="text-danger">Error: {{ error_message }}</p>
+    {% endif %}
 <div class="container mt-5">
     <h1>Hello, Internal Page!</h1>
     <p>This is an internal page for interacting with a FastAPI backend.</p>
@@ -246,6 +253,12 @@
                 types: ['geocode'],
                 componentRestrictions: {country: 'IT'} 
             });
+            
+            document.getElementById('poste-list').addEventListener('click', createPopupHandler(map, markers));
+    
+            document.getElementById('farmacie-list').addEventListener('click', createPopupHandler(map, markersFarmacie));
+
+            document.getElementById('esercizi-list').addEventListener('click', createPopupHandler(map, markersEsercizi));
         }
     
     }
