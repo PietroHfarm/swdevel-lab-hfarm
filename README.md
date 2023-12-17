@@ -1,17 +1,21 @@
-# swdevel-lab-hfarm
- Skeleton Project for the Lab of Software Project Development
+# FNS PROJECT 
 
-# Flask and FastAPI Dockerized Project
+# This is the project for the Lab of Software Project Development
 
-This project demonstrates a simple web application using Flask as the frontend and FastAPI as the backend. The frontend allows querying birthdays from the backend using a form. The project is Dockerized for easy deployment.
+FNS, short for Find National Service, is a groundbreaking software designed to simplify and streamline the process of locating essential services in your vicinity. Created with the mission to assist individuals in swiftly identifying nearby services, FNS is an innovative tool dedicated to enhancing convenience and accessibility.
+FNS focuses on aiding users in Milan, acting as a guiding beacon to find crucial services within their chosen proximity. Its primary functionalities revolve around locating pharmacies, bars/pubs, and post offices with ease. The user experience is straightforward: input your address or location and set your desired radius. In return, FNS generates a comprehensive map displaying a curated list of the nearest service points.
+This project represents an initial but pivotal step in providing an invaluable resource for community convenience. By leveraging technology to connect users with essential services efficiently, FNS embodies efficiency, accessibility, and ease of use. 
+
+
 
 ## Architecture
 
 The project follows a simple client-server architecture:
 
-1. **Frontend (Flask):**
+1. **Frontend (Flask, Bootstrap):**
    - Represents the user interface or client side.
    - Built with Flask, a lightweight web framework for Python.
+   - Bootstrap frontend implementation for the web development
    - Responsible for rendering web pages and user interaction, including the form for querying the backend.
 
 2. **Backend (FastAPI):**
@@ -25,7 +29,7 @@ The project follows a simple client-server architecture:
    - Simplifies the deployment and management of the entire application.
 
 ### Communication
-Bidirectional communication is established between the Frontend (Flask) and Backend (FastAPI). Docker Compose facilitates this communication, allowing the components to work together seamlessly.
+Bidirectional communication is established between the Frontend (Flask, Bootstrap) and Backend (FastAPI). Docker Compose facilitates this communication, allowing the components to work together seamlessly.
 
 ## Project Structure
 
@@ -33,6 +37,10 @@ Bidirectional communication is established between the Frontend (Flask) and Back
     - Dockerfile: Dockerfile for building the backend image.
     - main.py: Main backend application file.
     - requirements.txt: List of Python dependencies for the backend.
+    - csv_readings.py: module used to read CSVs
+    - distance_function: module to calculate geodetic distance
+    - CSVs: CSVs used to provide information 
+
 - `frontend/`: Flask frontend implementation.
     - Dockerfile: Dockerfile for building the frontend image.
     - static/: Folder for static files (CSS, JavaScript, etc.).
@@ -45,7 +53,19 @@ Bidirectional communication is established between the Frontend (Flask) and Back
 
 - Docker
 - Visual Studio Code (Optional, for debugging)
+- install geopy, dotenv
+- insert the personal google key available following the steps in the provided link: https://developers.google.com/maps/documentation/javascript/get-api-key?hl=it
 
+## CSV needed
+
+- poste.csv: https://www.dati.gov.it/view-dataset/dataset?id=6331b260-941a-4420-bbc5-40837e2d38ec it contains the list of all the post offices in the city of Milan with the address, the latitude and longitude.
+- esercizi1.csv: https://www.dati.gov.it/view-dataset/dataset?id=948d5e06-9707-4eda-9439-05004498b559 it contains the list of bars and pubs in the city of Milan, with the address, the latitude and longitude, we deleted the Nan value manually.
+- farmacie.csv: https://www.dati.gov.it/view-dataset/dataset?id=cb5e4a55-2017-4668-968b-f9e9b3cbbcdf it contains the list of all the pharmacies in the city of Milan, with the address, the latitude and longitude.
+
+## How it works
+Accessing the Service: Upon entering the internal page, you'll be prompted to input your address or current location. Set Your Preferences: Specify your desired radius within which you want to search for services. Select Service Type: Choose the specific service you're looking for - pharmacies, bars/pubs, or post offices. Instant Results: With a click, FNS generates a comprehensive map pinpointing the nearest service points within your chosen radius.
+
+  
 ## Usage
 
 1. Clone the repository and navigate in the directory:
