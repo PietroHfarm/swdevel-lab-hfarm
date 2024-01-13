@@ -13,11 +13,11 @@ def calcola_distanza(lat1, lon1, lat2, lon2):
         lon2 (float): Longitude of the second point.
 
     Returns:
-        float or False: The distance in meters
+        float or -1: The distance in meters
         between the two points if coordinates are valid,
-        or False if any latitude or longitude is less than 0.0.
+        or -1 if any latitude or longitude is less than 0.0.
     """
     if (-90 <= lat1 <= 90 or -90 <= lon1 <= 90):
         return geodesic((lat1, lon1), (lat2, lon2)).meters
     else:
-        return False
+        return -1
