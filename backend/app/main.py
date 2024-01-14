@@ -39,7 +39,7 @@ def get_poste(lat: float = Query(0, title='Latitude',
     postal data within the specified radius.
 
     Algorithm:
-    1. Read data from the CSV file using the function leggi_dati_da_csv.
+    1. Read data from the CSV file using the function csv_reading.
     2. Filter postal data within the specified radius:
        - Iterate through postal data.
        - Calculate the distance between provided
@@ -49,11 +49,11 @@ def get_poste(lat: float = Query(0, title='Latitude',
     3. Return the filtered postal data within the radius as a JSON response.
 
     """
-    poste_data = leggi_dati_da_csv("/app/app/poste.csv")
+    poste_data = csv_reading("/app/app/poste.csv")
 
     poste_in_radius = []
     for poste in poste_data:
-        distance = calcola_distanza(lat, lon, float(
+        distance = distance_calc(lat, lon, float(
             poste['LAT_Y_4326']), float(poste['LONG_X_4326']))
         if distance is not False:
             if distance <= radius:
@@ -92,7 +92,7 @@ def get_farmacie(lat: float = Query(0,
     pharmaceutical data within the specified radius.
 
     Algorithm:
-    1. Read data from the CSV file using the function leggi_dati_da_csv.
+    1. Read data from the CSV file using the function csv_reading.
     2. Filter pharmaceutical data within the specified radius:
        - Iterate through pharmaceutical data.
        - Calculate the distance between provided
@@ -103,11 +103,11 @@ def get_farmacie(lat: float = Query(0,
      within the radius as a JSON response.
 
     """
-    farmacie_data = leggi_dati_da_csv('/app/app/farmacie.csv')
+    farmacie_data = csv_reading('/app/app/farmacie.csv')
 
     farmacie_in_radius = []
     for farmacie in farmacie_data:
-        distance = calcola_distanza(lat, lon, float(farmacie['LATITUDINE']),
+        distance = distance_calc(lat, lon, float(farmacie['LATITUDINE']),
                                     float(farmacie['LONGITUDINE']))
         if distance != -1:
             if distance <= radius:
@@ -146,7 +146,7 @@ def get_esercizi(lat: float = Query(0,
     services data within the specified radius.
 
     Algorithm:
-    1. Read data from the CSV file using the function leggi_dati_da_csv.
+    1. Read data from the CSV file using the function csv_reading.
     2. Filter services data within the specified radius:
        - Iterate through services data.
        - Calculate the distance between provided
@@ -156,11 +156,11 @@ def get_esercizi(lat: float = Query(0,
     3. Return the filtered services data within the radius as a JSON response.
 
     """
-    esercizi_data = leggi_dati_da_csv('/app/app/esercizi1.csv')
+    esercizi_data = csv_reading('/app/app/esercizi1.csv')
 
     esercizi_in_radius = []
     for esercizi in esercizi_data:
-        distance = calcola_distanza(lat, lon,
+        distance = distance_calc(lat, lon,
                                     float(esercizi['LAT_WGS84']),
                                     float(esercizi['LONG_WGS84']))
         if distance != -1:

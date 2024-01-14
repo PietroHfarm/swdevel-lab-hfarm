@@ -1,7 +1,7 @@
 import csv
 
 
-def leggi_dati_da_csv(file_path):
+def csv_reading(file_path):
     """
     Reads data from a CSV file and returns a list of dictionaries.
 
