@@ -3,13 +3,16 @@ Frontend module for the Flask application.
 
 This module defines a simple Flask
 application that serves as the frontend for the project.
+
+Import the requests library to make HTTP requests
+Dotenv package functions to pick the google key
+
 """
 
 from flask import Flask, render_template
-import requests  # Import the requests library to make HTTP requests
+import requests  
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
-# dotenv package functions to pick the google key
 from dotenv import load_dotenv
 import os
 from wtforms import FloatField, SubmitField, SelectField

@@ -121,11 +121,11 @@
         return function (e) {
             var listItem = e.target.closest('.list-group-item');
             if (listItem) {
-            // Recupera le coordinate dalla lista
+            // Pick the coordinates from the list
                 var lat = parseFloat(listItem.getAttribute('data-lat'));
                 var lon = parseFloat(listItem.getAttribute('data-lon'));
 
-                // Trova il marker corrispondente
+                // Find the associate marker
             var marker = markers.find(function (marker) {
                 return marker.getPosition().lat() === lat && marker.getPosition().lng() === lon;
                 });
@@ -145,13 +145,13 @@
         
     function initMap() {
         if (typeof google !== 'undefined') {
-            // Inizializza la mappa
+            // Initialize the map
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: {{ lat if lat else 0 }}, lng: {{ lon if lon else 0 }}},
-                zoom: 12 // Imposta il livello di zoom desiderato
+                zoom: 12 // set the zoom level
             });
 
-            // Aggiungi i marker dalla lista delle poste o delle farmacie o degli esercizi
+            // Add markers from post office or pharmacy or exercise list
             {% if data %}
                 {% if category == "poste" %}
                     {% for poste in data['poste'] %}
@@ -245,7 +245,7 @@
                 {% endif %}
             {% endif %}
             
-            // Inizializza Places Autocomplete 
+            // Initialize Places Autocomplete
             var input = document.getElementById('autocomplete');
             var autocomplete = new google.maps.places.Autocomplete(input, {
                 types: ['geocode'],
