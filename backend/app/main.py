@@ -23,7 +23,7 @@ def get_poste(lat: float = Query(0, title='Latitude',
               radius: float = Query(100, title='Radius',
                                     description='Radius in meters')
               ):
-                  
+
     """
     Retrieve postal data within a specified radius
     from given latitude and longitude.
@@ -76,7 +76,7 @@ def get_farmacie(lat: float = Query(0,
                                        title='Radius',
                                        description='Radius in meters')
                  ):
-    
+
     """
     Retrieve pharmaceutical data within a specified radius
     from given latitude and longitude.
@@ -99,7 +99,8 @@ def get_farmacie(lat: float = Query(0,
        coordinates and pharmaceutical data coordinates.
        - Add pharmaceutical data falling within the specified
        radius to the result.
-    3. Return the filtered pharmaceutical data within the radius as a JSON response.
+    3. Return the filtered pharmaceutical data
+     within the radius as a JSON response.
 
     """
     farmacie_data = leggi_dati_da_csv('/app/app/farmacie.csv')
@@ -129,7 +130,7 @@ def get_esercizi(lat: float = Query(0,
                                        title='Radius',
                                        description='Radius in meters')
                  ):
-    
+
     """
     Retrieve services data within a specified radius
     from given latitude and longitude.
