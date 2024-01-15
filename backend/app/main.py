@@ -6,8 +6,8 @@ as the backend for the project.
 """
 
 from fastapi import FastAPI, Query, HTTPException
-from .mymodules.csv_reading_function import leggi_dati_da_csv
-from .mymodules.distance_function import calcola_distanza
+from .mymodules.csv_reading_function import csv_reading
+from .mymodules.distance_function import distance_calc
 import os
 
 app = FastAPI()

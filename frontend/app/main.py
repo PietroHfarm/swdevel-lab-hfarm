@@ -10,7 +10,7 @@ Dotenv package functions to pick the google key
 """
 
 from flask import Flask, render_template
-import requests  
+import requests
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from dotenv import load_dotenv
@@ -89,6 +89,22 @@ def get_poste_from_backend(lon, lat, radius):
 
 
 def get_farmacie_from_backend(lon, lat, radius):
+    """
+    Retrieves 'farmacie' data from a backend service using
+    provided longitude, latitude, and radius.
+
+    Parameters:
+    - lon (float): Longitude value.
+    - lat (float): Latitude value.
+    - raggio (float): Radius in meters for the query.
+
+    Returns:
+    - dict: JSON response containing 'farmacie' data
+    from the backend.
+
+    If an error occurs during the request, it prints an
+    error message and returns a dictionary with an 'error' key.
+    """
     backend_url = f'http://backend/farmacie?lat={lon}&lon={lat}&radius={radius}'
     try:
         response = requests.get(backend_url)
@@ -100,6 +116,21 @@ def get_farmacie_from_backend(lon, lat, radius):
 
 
 def get_esercizi_from_backend(lon, lat, radius):
+    """
+    Retrieves 'esercizi' data from a backend service using provided
+    longitude, latitude, and radius.
+
+    Parameters:
+    - lon (float): Longitude value.
+    - lat (float): Latitude value.
+    - raggio (float): Radius in meters for the query.
+
+    Returns:
+    - dict: JSON response containing 'esercizi' data from the backend.
+
+    If an error occurs during the request, it prints an error message
+    and returns a dictionary with an 'error' key.
+    """
     backend_url = f'http://backend/esercizi?lat={lon}&lon={lat}&radius={radius}'
     try:
         response = requests.get(backend_url)
@@ -112,7 +143,21 @@ def get_esercizi_from_backend(lon, lat, radius):
 
 # using google maps API to extract lat and lon from address
 def get_lat_lon_from_address(address):
+    """
+    Retrieves location-based data from the backend
+    by providing longitude, latitude, and a specified radius.
 
+    Parameters:
+    - lon (float): Longitude value.
+    - lat (float): Latitude value.
+    - raggio (float): Radius in meters for the query.
+
+    Returns:
+    - dict: JSON response containing data from the backend.
+
+    In case of a request error, the function prints an error
+    message and returns a dictionary with an 'error' key.
+    """
     geocode_url = f'https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={google_maps_api_key}'
 
     response = requests.get(geocode_url)
@@ -128,11 +173,11 @@ def get_lat_lon_from_address(address):
             lon = location['lng']
             return lat, lon
         else:
-            print("L'indirizzo non contiene la sigla di provincia 'MI'.")
+            print("The address does not contain the 'MI' province tag.")
             return None, None
 
     else:
-        print(f"Errore nella richiesta di geocodifica: {data['status']}")
+        print(f"Eroor in the geocode request: {data['status']}")
         return None, None
 
 
@@ -174,7 +219,7 @@ def servicepage():
             elif category == "esercizi":
                 data = get_esercizi_from_backend(lat, lon, radius)
             else:
-                error_message = 'Categoria non supportata.'
+                error_message = 'Category not supported.'
 
                 return render_template('servicepage.html', form=form,
                                        error_message=error_message,
@@ -185,9 +230,9 @@ def servicepage():
                                    lat=lat, lon=lon, data=data,
                                    apiKey=google_maps_api_key)
         else:
-            error_message = "Errore nella geocodifica dell'indirizzo."\
-                            "L'indirizzo deve essere all'interno"\
-                            "della città di Milano"
+            error_message = "Error in the geocode of the address."\
+                            "The address must be within"\
+                            "the city of Milan"
     return render_template('servicepage.html',
                            form=form,
                            error_message=error_message,
